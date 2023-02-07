@@ -25,3 +25,5 @@ Docker, tout comme d'autres implémentations de conteneurs, est basé sur deux e
 ## Souces :link:
 N/A
 
+https://hub.docker.com/_/mariadb
+https://www.php.net/manual/fr/install.unix.nginx.php
