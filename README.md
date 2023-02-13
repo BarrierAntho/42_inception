@@ -25,5 +25,7 @@ Docker, tout comme d'autres implémentations de conteneurs, est basé sur deux e
 ## Souces :link:
 N/A
 
-https://hub.docker.com/_/mariadb
-https://www.php.net/manual/fr/install.unix.nginx.php
+- https://hub.docker.com/_/mariadb
+- https://www.php.net/manual/fr/install.unix.nginx.php
+- https://gist.github.com/Mins/4602864
+- https://www.digitalocean.com/community/tutorials/how-to-install-mariadb-on-debian-10
