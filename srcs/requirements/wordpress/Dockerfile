@@ -9,10 +9,18 @@ LABEL description="wordpress images for 42_inception"
 RUN apt update -y && apt upgrade -y && apt install -y vim \
 	curl \
 	wget \
+	mime-support \
+	php-common php7.3-cli php7.3-common php7.3-json php7.3-opcache php7.3-readline php7.3-mysql \
+	php-fpm \
 	mariadb-client \
-	mime-support php-common php7.3-cli php7.3-common php7.3-json php7.3-opcache php7.3-readline \
 	&& rm -rf /var/lib/apt/lists/*
-#RUN wget "https://wordpress.org/wordpress-6.1.1.tar.gz" && tar -xzvf "wordpress-6.1.1.tar.gz"
+RUN 	curl -O https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar \
+	&& chmod +x wp-cli.phar \
+	&& mv wp-cli.phar /usr/local/bin/wp
+RUN	mkdir -p /var/www/html/wordpress \
+	&& cd /var/www/html/wordpress \
+	&& wp core download "https://wordpress.org/wordpress-5.2.17.tar.gz" --allow-root
+
 #COPY
 #ADD ["https://wordpress.org/wordpress-6.1.1.tar.gz", "./"]
 #WORKDIR
