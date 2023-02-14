@@ -18,6 +18,27 @@ PROGRAM=${0}
 
 ##############################
 ### FUNCTIONS ###
+function	start_mysql()
+{
+	echo -e "${YE}${SEP_SP}${NC}";
+	echo -e "${YE}Executing \"${FUNCNAME}\"${NC}";
+	service mysql start;
+	if [ "$?" != 0 ];
+	then
+		echo -e "${RD}Error: start mysql${NC}";
+		echo -e "${YE}${SEP_SP}${NC}";
+		return 1;
+	fi;
+	mysqld_safe;
+	if [ "$?" != 0 ];
+	then
+		echo -e "${RD}Error: start mysqld_safe${NC}";
+		echo -e "${YE}${SEP_SP}${NC}";
+		return 1;
+	fi;
+	return 0;
+}
+
 function	exec_mysql_secure_install()
 {
 	echo -e "${YE}${SEP_SP}${NC}";
@@ -28,7 +49,11 @@ function	exec_mysql_secure_install()
 		expect \"Enter current password for root (enter for none):\"
 		send \"test\r\"
 		expect \"Change the root password?\"
-		send \"n\r\"
+		send \"y\r\"
+		expect \"New password:\"
+		send \"test\r\"
+		expect \"Re-enter new password:\"
+		send \"test\r\"
 		expect \"Remove anonymous users?\"
 		send \"y\r\"
 		expect \"Disallow root login remotely?\"
@@ -71,7 +96,7 @@ function	main()
 	echo -e "${YE}${SEP_SP}${NC}";
 	echo -e "${YE}Executing \"${FUNCNAME}\"${NC}";
 	# START MYSQL SERVICE
-	service mysql start;
+	start_mysql;
 	if [ "$?" != 0 ]; then return 1; fi;
 	# EXECUTE MYSQL SECURE INSTALLATION
 	exec_mysql_secure_install;
@@ -80,7 +105,6 @@ function	main()
 	create_wp_db;
 	if [ "$?" != 0 ]; then return 1; fi;
 	# EXECUTE MYSQLD PROGRAM
-	exec mysqld_safe /var/lib/mysql;
 	if [ "$?" != 0 ]; then return 1; fi;
 	return 0;
 }
