@@ -139,3 +139,7 @@ server {
 
 ### OpenSSL
 - https://www.openssl.org/docs/man1.0.2/man1/openssl-req.html
+- https://hub.docker.com/_/mariadb
+- https://www.php.net/manual/fr/install.unix.nginx.php
+- https://gist.github.com/Mins/4602864
+- https://www.digitalocean.com/community/tutorials/how-to-install-mariadb-on-debian-10
