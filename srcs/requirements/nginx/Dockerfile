@@ -3,6 +3,8 @@ MAINTAINER abarrier
 #ARG
 #ENV
 LABEL maintainer="abarrier@student.42.fr"
+LABEL version="1.0"
+LABEL description="nginx images for 42_inception"
 #VOLUME /var/www
 RUN apt update -y && apt upgrade -y && apt install -y vim \
 	curl \
