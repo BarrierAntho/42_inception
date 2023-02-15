@@ -1,39 +1,48 @@
 services:
-  nginx:
-    build:
-      context: requirements/nginx
-      dockerfile: Dockerfile
-      network: net_inception
-    container_name: nginx
-    ports:
-      - 443:8043
-    env_file: srcs/.env
-    init: true
-    restart: on-failure
-      #    secrets:
-      #      server-certificate:
-      #        - xxx
-      #        # to place into /run/secrets/<secret_name>
-    stop_signal: SIGTERM
+	nginx:
+		build:
+			context: requirements/nginx
+			dockerfile: Dockerfile
+		container_name: nginx
+		networks: inception
+		ports: 443
+		env_file: env
+		init: true
+		restart: on-failure
+		stop_signal: SIGTERM
+#	    secrets:
+#	      server-certificate:
+#	        - xxx
+#	        # to place into /run/secrets/<secret_name>
 ########################################
-
-  mariadb:
-    build:
-      context: requirements/mariadb
-      dockerfile: Dockerfile
-      network: net_inception
-    container_name: mariadb
-    ports:
-      - 3306:3306
-    volumes: /var/abarrier/data/mysql:/var/lib/mysql
-    depends_on:
-      nginx:
-        condition: service_healthy
-    env_file: srcs/.env
-    init: true
-    restart: on_failure
-    stop_signal: SIGTERM
-      #  secrets:
-      #    server-certification:
-      #      file:
-      #        - ./server.cert
+#	mariadb:
+#		build:
+#			context: requirements/mariadb
+#			dockerfile: Dockerfile
+#		container_name: mariadb
+#		networks: inception
+#		ports: 3306
+#		volumes: mariadb:/var/lib/mysql
+#		depends_on:
+#			nginx:
+#				condition: service_healthy
+#		env_file: env
+#		init: true
+#		restart: on_failure
+#		stop_signal: SIGTERM
+#	    secrets:
+#	      server-certificate:
+#	        - xxx
+#	        # to place into /run/secrets/<secret_name>
+########################################
+#volumes:
+#	mariadb:
+#		driver: local
+#		driver_opts:
+#			type: none
+#			o: bind
+#			device: /user/abarrier/data/mariadb
+########################################
+networks:
+	inception:
+		driver: bridge
