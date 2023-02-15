@@ -1,7 +1,7 @@
 FROM debian:buster
 MAINTAINER abarrier
 #ARG
-#ENV
+#ENV MYSQL_ROOT_PASSWORD="IAmGod" WP_DB="wordpress" WP_MANAGER_NAME="wp_manager" WP_MANAGER_PASSWORD="IAmRightHandGod"
 LABEL maintainer="abarrier@student.42.fr"
 LABEL version="1.0"
 LABEL description="mariadb images for 42_inception"
@@ -19,4 +19,4 @@ EXPOSE 3306
 #USER
 #ONBUILD
 CMD ["ping", "localhost"]
-#ENTRYPOINT ["./config.sh"]
+#ENTRYPOINT ["/bin/sh", "-c", "./config.sh"]

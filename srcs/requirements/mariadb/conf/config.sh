@@ -5,6 +5,8 @@
 SEP_P="####################"
 SEP_SP="--------------------"
 
+##############################
+### COLOR CONSTANT ###
 RD='\033[0;31m'
 GN='\033[0;32m'
 YE='\033[0;33m'
@@ -39,6 +41,19 @@ function	start_mysql()
 	return 0;
 }
 
+function	check_mysql_wp_setup()
+{
+	echo -e "${YE}${SEP_SP}${NC}";
+	echo -e "${YE}Executing \"${FUNCNAME}\"${NC}";
+	# CHECK IF THE WORDPRESS DATABASE EXISTS
+	if ! [[ -e "${MYSQL_DATA}/${WP_DB}" ]];
+	then
+		echo -e "${RD}Warning: ${WP_DB} does not exist${NC}";
+		return 1;
+	fi;
+	return 0;
+}
+
 function	exec_mysql_secure_install()
 {
 	echo -e "${YE}${SEP_SP}${NC}";
@@ -47,13 +62,13 @@ function	exec_mysql_secure_install()
 		set timeout 10
 		spawn mysql_secure_installation
 		expect \"Enter current password for root (enter for none):\"
-		send \"test\r\"
+		send \"${MYSQL_ROOT_PASSWORD}\r\"
 		expect \"Change the root password?\"
 		send \"y\r\"
 		expect \"New password:\"
-		send \"test\r\"
+		send \"${MYSQL_ROOT_PASSWORD}\r\"
 		expect \"Re-enter new password:\"
-		send \"test\r\"
+		send \"${MYSQL_ROOT_PASSWORD}\r\"
 		expect \"Remove anonymous users?\"
 		send \"y\r\"
 		expect \"Disallow root login remotely?\"
@@ -78,10 +93,11 @@ function	create_wp_db()
 {
 	echo -e "${YE}${SEP_SP}${NC}";
 	echo -e "${YE}Executing \"${FUNCNAME}\"${NC}";
-	mysql -v -e "CREATE DATABASE IF NOT EXISTS wordpress ;";
-	mysql -v -e "USE wordpress ;";
-	mysql -v -e "GRANT ALL PRIVILEGES ON wordpress.* TO wordpressusername@locahost IDENTIFIED BY 'password' ;";
-	mysql -v -e "FLUSH PRIVILEGES ;";
+	mysql -u root -p${MYSQL_ROOT_PASSWORD} -v -e "CREATE DATABASE IF NOT EXISTS ${WP_DB};";
+#	mysql -u root -p${MYSQL_ROOT_PASSWORD} -v -e "USE ${WP_DB};";
+	mysql -u root -p${MYSQL_ROOT_PASSWORD} -v -e "CREATE USER IF NOT EXISTS '${WP_MANAGER_NAME}'@'localhost' IDENTIFIED BY '${WP_MANAGER_PASSWORD}';"
+	mysql -u root -p${MYSQL_ROOT_PASSWORD} -v -e "GRANT ALL PRIVILEGES ON ${WP_DB}.* TO '${WP_MANAGER_NAME}'@'localhost' IDENTIFIED BY '${WP_MANAGER_PASSWORD}' WITH GRANT OPTION;";
+	mysql -u root -p${MYSQL_ROOT_PASSWORD} -v -e "FLUSH PRIVILEGES;";
 	if [ "$?" != 0 ];
 	then
 		echo -e "${RD}Error: mysql create database${NC}";
@@ -98,14 +114,19 @@ function	main()
 	# START MYSQL SERVICE
 	start_mysql;
 	if [ "$?" != 0 ]; then return 1; fi;
-	# EXECUTE MYSQL SECURE INSTALLATION
-	exec_mysql_secure_install;
-	if [ "$?" != 0 ]; then return 1; fi;
-	# CREATE WORDPRESS DATABASE
-	create_wp_db;
-	if [ "$?" != 0 ]; then return 1; fi;
-	# EXECUTE MYSQLD PROGRAM
-	if [ "$?" != 0 ]; then return 1; fi;
+	# CHECK MYSQL AND WORDPRESS SETUP
+	check_mysql_wp_setup;
+	if [ "$?" != 0 ]
+	then
+		# EXECUTE MYSQL SECURE INSTALLATION
+		exec_mysql_secure_install;
+		if [ "$?" != 0 ]; then return 1; fi;
+		# WORDPRESS DATABASE AND USER SETUP
+		create_wp_db;
+		if [ "$?" != 0 ]; then return 1; fi;
+	else
+		echo -e "${GN}MYSQL and Wordpress database setup are already configured${NC}";
+	fi;
 	return 0;
 }
 
