@@ -1,5 +1,6 @@
 # GLOBAL SETUP
 DOMAIN_NAME=abarrier.42.fr
+TERM=xterm-256color
 
 #MYSQL SETUP
 MYSQL_DATA=/var/lib/mysql
