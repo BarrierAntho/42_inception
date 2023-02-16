@@ -13,7 +13,7 @@ DOCKER_IMAGES		:=	docker images -a -q
 # -------------------------------------------------
 DATA_DIR		:=	/home/$(USER)/data
 DATA_MARIADB		:=	$(DATA_DIR)/mariadb
-DATA_WP			:=	$(DATA_DIR)/wp
+DATA_WP			:=	$(DATA_DIR)/wordpress
 # -------------------------------------------------
 # GLOBAL SETUP
 # -------------------------------------------------
