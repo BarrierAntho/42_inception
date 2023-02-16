@@ -95,8 +95,8 @@ function	create_wp_db()
 	echo -e "${YE}Executing \"${FUNCNAME}\"${NC}";
 	mysql -u root -p${MYSQL_ROOT_PASSWORD} -v -e "CREATE DATABASE IF NOT EXISTS ${WP_DB};";
 #	mysql -u root -p${MYSQL_ROOT_PASSWORD} -v -e "USE ${WP_DB};";
-	mysql -u root -p${MYSQL_ROOT_PASSWORD} -v -e "CREATE USER IF NOT EXISTS '${WP_MANAGER_NAME}'@'localhost' IDENTIFIED BY '${WP_MANAGER_PASSWORD}';"
-	mysql -u root -p${MYSQL_ROOT_PASSWORD} -v -e "GRANT ALL PRIVILEGES ON ${WP_DB}.* TO '${WP_MANAGER_NAME}'@'localhost' IDENTIFIED BY '${WP_MANAGER_PASSWORD}' WITH GRANT OPTION;";
+	mysql -u root -p${MYSQL_ROOT_PASSWORD} -v -e "CREATE USER IF NOT EXISTS '${WP_USR_NAME}'@'localhost' IDENTIFIED BY '${WP_USR_PASSWORD}';"
+	mysql -u root -p${MYSQL_ROOT_PASSWORD} -v -e "GRANT ALL PRIVILEGES ON ${WP_DB}.* TO '${WP_USR_NAME}'@'localhost' IDENTIFIED BY '${WP_USR_PASSWORD}' WITH GRANT OPTION;";
 	mysql -u root -p${MYSQL_ROOT_PASSWORD} -v -e "FLUSH PRIVILEGES;";
 	if [ "$?" != 0 ];
 	then
