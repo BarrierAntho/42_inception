@@ -98,7 +98,7 @@ function	main()
 	check_wp_setup;
 	if [ "$?" != 0 ]; then return 1; fi;
 	# INSTALL WORDPRESS ONLY IF IT IS NOT ALREADY INSTALLED
-	wp core is-installed;
+	wp core is-installed --allow-root --path=${WP_DIR};
 	if [ "$?" == 0 ]
 	then
 		# SET CONFIG FILE
