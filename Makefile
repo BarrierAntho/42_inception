@@ -66,7 +66,7 @@ restart:	| data_setup
 # -------------------------------------------------
 # CREATE AND START CONTAINERS
 up:	| data_setup
-	docker compose --file $(DOCKER_COMPOSE_FILE) up --build
+	docker compose --file $(DOCKER_COMPOSE_FILE) up --build --detach
 
 # STOP AND REMOVE CONTAINERS, NETWORKS, IMAGES AND VOLUMES
 down:
