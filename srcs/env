@@ -7,6 +7,14 @@ MYSQL_DATA=/var/lib/mysql
 MYSQL_ROOT_PASSWORD=IAmGod
 
 # WORDPRESS SETUP
+WP_DIR=/var/www/html/wordpress
+WP_CFG=wp-config.php
 WP_DB=wordpress
+WP_TITLE=inception
 WP_MANAGER_NAME=wp_manager
 WP_MANAGER_PASSWORD=IAmRightHandGod
+WP_MANAGER_EMAIL=abarrier@student.42.fr
+WP_USR_NAME=abarrier
+WP_USR_PASSWORD=IAm42
+WP_USR_EMAIL=abarrier@student.42.fr
+WP_USR_DISP_NAME=anthony
