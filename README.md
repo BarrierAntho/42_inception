@@ -141,3 +141,7 @@ server {
 - https://www.php.net/manual/fr/install.unix.nginx.php
 - https://gist.github.com/Mins/4602864
 - https://www.digitalocean.com/community/tutorials/how-to-install-mariadb-on-debian-10
+
+### Wordpress
+- https://fr.wordpress.org/support/article/editing-wp-config-php/
+- https://github.com/WordPress/WordPress/blob/master/wp-config-sample.php
