@@ -18,5 +18,5 @@ EXPOSE 3306
 #STOPSIGNAL SIGQUIT
 #USER
 #ONBUILD
-CMD ["ping", "localhost"]
-#ENTRYPOINT ["/bin/sh", "-c", "./config.sh"]
+#CMD ["ping", "localhost"]
+ENTRYPOINT ["/bin/sh", "-c", "./config.sh"]
