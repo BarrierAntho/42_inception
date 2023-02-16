@@ -73,7 +73,6 @@ CMD ["nginx","-g","daemon off;"]
 ```
 
 #### nginx.conf
-```
 ...
 server {
 	listen       443 ssl;
@@ -126,7 +125,6 @@ server {
 	#    deny  all;
 	#}
 	}
-...
 ```
 
 ## Souces :link:

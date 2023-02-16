@@ -1,62 +1,132 @@
+# -------------------------------------------------
+# GLOBAL SETUP
+# -------------------------------------------------
+USER			:=	abarrier
+# -------------------------------------------------
+# DOCKER SETUP
+# -------------------------------------------------
 DOCKER_COMPOSE_FILE	:=	./srcs/docker-compose.yml
+DOCKER_PS		:=	docker ps -a -q
+DOCKER_IMAGES		:=	docker images -a -q
+# -------------------------------------------------
+# DATA SETUP
+# -------------------------------------------------
+DATA_DIR		:=	/home/$(USER)/data
+DATA_MARIADB		:=	$(DATA_DIR)/mariadb
+DATA_WP			:=	$(DATA_DIR)/wp
+# -------------------------------------------------
+# GLOBAL SETUP
+# -------------------------------------------------
+SEP_P			:=	"----------------------------------------------"
+SEP_SP			:=	".............................................."
+# -------------------------------------------------
+# COLOR SETUP
+# -------------------------------------------------
+BASE=\033[
+RD=$(BASE)0;31m
+GN=$(BASE)0;32m
+OG=$(BASE)0;33m
+BU=$(BASE)0;34m
+MG=$(BASE)0;35m
+CY=$(BASE)0;36m
+YE=$(BASE)1;33m
+NC=$(BASE)0m
 
-.PHONY:	all build create stop pause unpause restart up down rm ps stat_run stat_pause stat_exited images
+.PHONY:	all build create stop pause unpause restart up down rm ps stat stat_run stat_pause stat_exited images clean clean_containers clean_images clean_volumes clean_networks clean_data
 
 # -------------------------------------------------
 # SERVICES
 # -------------------------------------------------
 # BUILD OR REBUILD SERVICES
-build:
-	docker compose -f $(DOCKER_COMPOSE_FILE) build
+build:	| data_setup
+	docker compose --file $(DOCKER_COMPOSE_FILE) build
 
 # CREATE A SERVICE
-create:
-	docker compose -f $(DOCKER_COMPOSE_FILE) create
+create:	| data_setup
+	docker compose --file $(DOCKER_COMPOSE_FILE) create
 
 # STOP SERVICES
 stop:
-	docker compose -f $(DOCKER_COMPOSE_FILE) stop
+	docker compose --file $(DOCKER_COMPOSE_FILE) stop
 
 # PAUSE SERVICES
 pause:
-	docker compose -f $(DOCKER_COMPOSE_FILE) pause
+	docker compose --file $(DOCKER_COMPOSE_FILE) pause
 
 # UNPAUSE SERVICES
-unpause:
-	docker compose -f $(DOCKER_COMPOSE_FILE) unpause
+unpause:	| data_setup
+	docker compose --file $(DOCKER_COMPOSE_FILE) unpause
 
 # RESTART SERVICES
-restart:
-	docker compose -f $(DOCKER_COMPOSE_FILE) restart
+restart:	| data_setup
+	docker compose --file $(DOCKER_COMPOSE_FILE) restart
 
 # -------------------------------------------------
 # CONTAINERS
 # -------------------------------------------------
 # CREATE AND START CONTAINERS
-up:
-	docker compose -f $(DOCKER_COMPOSE_FILE) up
+up:	| data_setup
+	docker compose --file $(DOCKER_COMPOSE_FILE) up --build
 
 # STOP AND REMOVE CONTAINERS, NETWORKS, IMAGES AND VOLUMES
 down:
-	docker compose -f $(DOCKER_COMPOSE_FILE) down
+	docker compose --file $(DOCKER_COMPOSE_FILE) down
 
 # REMOVE STOPPED CONTAINERS
 rm:
-	docker compose -f $(DOCKER_COMPOSE_FILE) rm
+	docker compose --file $(DOCKER_COMPOSE_FILE) rm ---force --stop
 
 # LIST CONTAINERS
 ps:
-	docker compose -f $(DOCKER_COMPOSE_FILE) ps -a
+	docker compose --file $(DOCKER_COMPOSE_FILE) ps --all
+
+stat:
+	make -s stat_run
+	make -s stat_pause
+	make -s stat_exited
 
 stat_run:
-	docker compose -f $(DOCKER_COMPOSE_FILE) ps --status=running
+	docker compose --file $(DOCKER_COMPOSE_FILE) ps --status=running
 
 stat_pause:
-	docker compose -f $(DOCKER_COMPOSE_FILE) ps --status=paused
+	docker compose --file $(DOCKER_COMPOSE_FILE) ps --status=paused
 
 stat_exited:
-	docker compose -f $(DOCKER_COMPOSE_FILE) ps --status=exited
+	docker compose --file $(DOCKER_COMPOSE_FILE) ps --status=exited
 
 # LIST IMAGES
 images:
-	docker compose -f $(DOCKER_COMPOSE_FILE) images --format table
+	docker compose --file $(DOCKER_COMPOSE_FILE) images --format table
+
+# -------------------------------------------------
+# DATA SETUP
+# -------------------------------------------------
+data_setup:
+		mkdir -p $(DATA_MARIADB)
+		mkdir -p $(DATA_WP)
+
+# -------------------------------------------------
+# CLEAN UP
+# -------------------------------------------------
+clean:	| stop
+	make -s -i clean_containers
+	make -s -i clean_images
+	make -s -i clean_volumes
+	make -s -i clean_networks
+	make -s -i clean_data
+
+clean_containers:
+	docker rm $$($(DOCKER_PS))
+
+clean_images:
+	docker rmi $$($(DOCKER_IMAGES))
+
+clean_volumes:
+	docker volume rm $$(docker volume ls -q)
+
+clean_networks:
+	docker network rm $$(docker network ls -q)
+	
+clean_data:
+	sudo rm -rf $(DATA_DIR)
+	exit
