@@ -1,11 +1,11 @@
 FROM debian:buster
 MAINTAINER abarrier
 #ARG
-#ENV
+ENV TERM=xterm-256color WP_DIR="/var/www/html/wordpress" WP_CFG="wp-config.php" WP_DB="wp_db" WP_TITLE="wp_title" WP_MANAGER_NAME="wp_manager_name" WP_MANAGER_PASSWORD="wp_manager_password" WP_MANAGER_EMAIL="wp_manager_email" WP_USR_NAME="wp_usr_name" WP_USR_PASSWORD="wp_usr_password" WP_USR_EMAIL="wp_usr_email" WP_USSR_DISP_NAME="wp_ussr_disp_name"
 LABEL maintainer="abarrier@student.42.fr"
 LABEL version="1.0"
 LABEL description="wordpress images for 42_inception"
-#VOLUME /var/www
+VOLUME /var/www
 RUN apt update -y && apt upgrade -y && apt install -y vim \
 	curl \
 	wget \
@@ -20,11 +20,11 @@ RUN 	curl -O https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cl
 RUN	mkdir -p /var/www/html/wordpress \
 	&& cd /var/www/html/wordpress \
 	&& wp core download "https://wordpress.org/wordpress-5.2.17.tar.gz" --allow-root
-
-#COPY
-#ADD ["https://wordpress.org/wordpress-6.1.1.tar.gz", "./"]
+COPY ["./conf/wp-config.php", "/var/www/html/wordpress"]
+COPY ["./conf/config.sh", "./"]
+#ADD
 #WORKDIR
-#EXPOSE 12345
+EXPOSE 9000
 #STOPSIGNAL SIGQUIT
 #USER
 #ONBUILD
