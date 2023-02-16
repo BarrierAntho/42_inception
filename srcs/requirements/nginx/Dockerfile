@@ -1,7 +1,7 @@
 FROM debian:buster
 MAINTAINER abarrier
 #ARG
-#ENV
+ENV TERM=xterm-256color
 LABEL maintainer="abarrier@student.42.fr"
 LABEL version="1.0"
 LABEL description="nginx images for 42_inception"
