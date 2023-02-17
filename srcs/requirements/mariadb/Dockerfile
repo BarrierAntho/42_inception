@@ -7,6 +7,7 @@ LABEL version="1.0"
 LABEL description="mariadb images for 42_inception"
 VOLUME /var/lib/mysql/
 RUN	apt update -y && apt upgrade -y && apt install -y vim \
+	procps \
 	mariadb-server \
 	expect \
 	&& rm -rf /var/lib/apt/lists/*
