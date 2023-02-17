@@ -20,8 +20,7 @@ PROGRAM=${0}
 
 ##############################
 ### FUNCTIONS ###
-
-function	check_wp_setup()
+function	check_wp_config()
 {
 	echo -e "${YE}${SEP_SP}${NC}";
 	echo -e "${YE}Executing \"${FUNCNAME}\"${NC}";
@@ -34,6 +33,21 @@ function	check_wp_setup()
 	return 0;
 }
 
+# CREATE wp-config.php IF NOT EXISTS
+function	create_wp_config()
+{
+	echo -e "${YE}${SEP_SP}${NC}";
+	echo -e "${YE}Executing \"${FUNCNAME}\"${NC}";
+	wp config create --allow-root --path=${WP_DIR} --dbname=${WP_DB} --dbuser=${WP_USR_NAME} --dbpass=${WP_USR_PASSWORD} --locale=fr_FR --dbhost=${WP_DB_HOST}:${WP_DB_HOST_PORT};
+	if [ "$?" != 0 ]; then return 1; fi;
+	wp config set --allow-root --path=${WP_DIR} --raw WP_DEBUG true;
+	if [ "$?" != 0 ]; then return 1; fi;
+	wp config set --allow-root --path=${WP_DIR} ABSPATH ${WP_DIR};
+	if [ "$?" != 0 ]; then return 1; fi;
+	return 0;
+}
+
+# CHANGE wp-config.php SETTINGS ACCORDING TO ENV
 function	set_wp_config()
 {
 	echo -e "${YE}${SEP_SP}${NC}";
@@ -44,6 +58,8 @@ function	set_wp_config()
 	wp config set --allow-root --path=${WP_DIR} DB_USER ${WP_USR_NAME}
 	if [ "$?" != 0 ]; then return 1; fi;
 	wp config set --allow-root --path=${WP_DIR} DB_PASSWORD ${WP_USR_PASSWORD}
+	if [ "$?" != 0 ]; then return 1; fi;
+	wp config set --allow-root --path=${WP_DIR} DB_HOST ${WP_DB_HOST}
 	if [ "$?" != 0 ]; then return 1; fi;
 	return 0;
 }
@@ -95,15 +111,19 @@ function	main()
 	echo -e "${YE}${SEP_SP}${NC}";
 	echo -e "${YE}Executing \"${FUNCNAME}\"${NC}";
 	# CHECK WORDPRESS SETUP
-	check_wp_setup;
-	if [ "$?" != 0 ]; then return 1; fi;
-	# INSTALL WORDPRESS ONLY IF IT IS NOT ALREADY INSTALLED
-	wp core is-installed --allow-root --path=${WP_DIR};
-	if [ "$?" == 0 ]
+	check_wp_config;
+	if [ "$?" != 0 ]
 	then
-		# SET CONFIG FILE
+		create_wp_config;
+		if [ "$?" != 0 ]; then return 1; fi;
+	else
 		set_wp_config;
 		if [ "$?" != 0 ]; then return 1; fi;
+	fi;
+	# INSTALL WORDPRESS ONLY IF IT IS NOT ALREADY INSTALLED
+	wp core is-installed --allow-root --path=${WP_DIR};
+	if [ "$?" == 1 ]
+	then
 		# WORDPRESS DATABASE SETUP
 		create_wp_db;
 		if [ "$?" != 0 ]; then return 1; fi;
