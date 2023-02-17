@@ -142,6 +142,16 @@ server {
 - https://gist.github.com/Mins/4602864
 - https://www.digitalocean.com/community/tutorials/how-to-install-mariadb-on-debian-10
 
+### Mariadb
+- https://mariadb.com/kb/en/configuring-mariadb-for-remote-client-access/
+
 ### Wordpress
+- https://raw.githubusercontent.com/WordPress/WordPress/master/wp-config-sample.php
 - https://fr.wordpress.org/support/article/editing-wp-config-php/
-- https://github.com/WordPress/WordPress/blob/master/wp-config-sample.php
+- https://developer.wordpress.org/cli/commands/core/
+- https://developer.wordpress.org/cli/commands/core/download/
+- https://developer.wordpress.org/cli/commands/core/install/
+- https://developer.wordpress.org/cli/commands/config/create/
+- https://developer.wordpress.org/cli/commands/config/set/
+- https://developer.wordpress.org/cli/commands/user/create/
+- https://developer.wordpress.org/cli/commands/user/
