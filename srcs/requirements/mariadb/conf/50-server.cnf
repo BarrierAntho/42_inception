@@ -25,7 +25,9 @@ lc-messages-dir         = /usr/share/mysql
 
 # Instead of skip-networking the default is now to listen only on
 # localhost which is more compatible and is not less secure.
-bind-address            = 127.0.0.1
+# ANBA: Check https://mariadb.com/kb/en/configuring-mariadb-for-remote-client-access/
+#bind-address            = 127.0.0.1
+#bind-address            = *a
 
 #
 # * Fine Tuning
@@ -118,6 +120,10 @@ collation-server      = utf8mb4_general_ci
 #
 # Also available for other users if required.
 # See https://mariadb.com/kb/en/unix_socket-authentication-plugin/
+#
+# ANBA: Check https://mariadb.com/kb/en/configuring-mariadb-for-remote-client-access/
+skip-networking=0
+skip-bind-address
 
 # this is only for embedded server
 [embedded]
