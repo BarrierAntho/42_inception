@@ -126,7 +126,8 @@ function	nginx_start()
 	echo -e "${YE}${SEP_SP}${NC}";
 	echo -e "${YE}Executing \"${FUNCNAME}\"${NC}";
 	nginx -g "daemon off;";
-	if [ "$?" != 0 ]; then return 1; fi;
+	return 1;
+#	if [ "$?" != 0 ]; then return 1; fi;
 	return 0;
 }
 
