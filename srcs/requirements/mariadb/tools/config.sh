@@ -31,10 +31,17 @@ function	start_mysql()
 		echo -e "${YE}${SEP_SP}${NC}";
 		return 1;
 	fi;
-	mysqld_safe;
+	return 0;
+}
+
+function	stop_mysql()
+{
+	echo -e "${YE}${SEP_SP}${NC}";
+	echo -e "${YE}Executing \"${FUNCNAME}\"${NC}";
+	service mysql stop;
 	if [ "$?" != 0 ];
 	then
-		echo -e "${RD}Error: start mysqld_safe${NC}";
+		echo -e "${RD}Error: stop mysql${NC}";
 		echo -e "${YE}${SEP_SP}${NC}";
 		return 1;
 	fi;
@@ -97,6 +104,7 @@ function	create_wp_db()
 #	mysql -u root -p${MYSQL_ROOT_PASSWORD} -v -e "USE ${WP_DB};";
 	mysql -u root -p${MYSQL_ROOT_PASSWORD} -v -e "CREATE USER IF NOT EXISTS '${WP_USR_NAME}'@'localhost' IDENTIFIED BY '${WP_USR_PASSWORD}';"
 	mysql -u root -p${MYSQL_ROOT_PASSWORD} -v -e "GRANT ALL PRIVILEGES ON ${WP_DB}.* TO '${WP_USR_NAME}'@'%' IDENTIFIED BY '${WP_USR_PASSWORD}' WITH GRANT OPTION;";
+#	mysql -u root -p${MYSQL_ROOT_PASSWORD} -v -e "GRANT ALL PRIVILEGES ON ${WP_DB}.* TO '${WP_USR_NAME}'@'locahost' IDENTIFIED BY '${WP_USR_PASSWORD}' WITH GRANT OPTION;";
 	mysql -u root -p${MYSQL_ROOT_PASSWORD} -v -e "FLUSH PRIVILEGES;";
 	if [ "$?" != 0 ];
 	then
@@ -126,6 +134,17 @@ function	main()
 		if [ "$?" != 0 ]; then return 1; fi;
 	else
 		echo -e "${GN}MYSQL and Wordpress database setup are already configured${NC}";
+	fi;
+	# STOP MYSQL SERVICE
+	stop_mysql;
+	if [ "$?" != 0 ]; then return 1; fi;
+	# EXECUTE mysqld_safe TO GET PID 1 ON MARIADB CONTAINER
+	exec mysqld_safe;
+	if [ "$?" != 0 ];
+	then
+		echo -e "${RD}Error: start mysqld_safe${NC}";
+		echo -e "${YE}${SEP_SP}${NC}";
+		return 1;
 	fi;
 	return 0;
 }

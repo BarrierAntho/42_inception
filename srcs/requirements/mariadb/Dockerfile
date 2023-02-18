@@ -12,12 +12,12 @@ RUN	apt update -y && apt upgrade -y && apt install -y vim \
 	expect \
 	&& rm -rf /var/lib/apt/lists/*
 COPY ["./conf/50-server.cnf", "./etc/mysql/mariadb.conf.d/"]
-COPY ["./conf/config.sh", "./"]
+COPY ["./tools/config.sh", "./"]
 #ADD
 #WORKDIR
 EXPOSE 3306
 #STOPSIGNAL SIGQUIT
 #USER
 #ONBUILD
-CMD ["ping", "localhost"]
-#ENTRYPOINT ["/bin/sh", "-c", "./config.sh"]
+#CMD ["ping", "localhost"]
+ENTRYPOINT ["/bin/sh", "-c", "./config.sh"]
