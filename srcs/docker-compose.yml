@@ -12,9 +12,9 @@ services:
       - mariadb:/var/lib/mysql
     env_file: .env
     hostname: mariadb
-    init: true
+    #init: true
     restart: on-failure
-    stop_signal: SIGTERM
+    #stop_signal: SIGTERM
 #---------------------------------------
   wordpress:
     build:
@@ -29,9 +29,9 @@ services:
       - wordpress:/var/www/wordpress
     env_file: .env
     hostname: wordpress
-    init: true
+    #init: true
     restart: on-failure
-    stop_signal: SIGTERM
+    #stop_signal: SIGTERM
     depends_on:
       - mariadb
 #---------------------------------------
@@ -48,9 +48,9 @@ services:
       - wordpress:/var/www/wordpress
     env_file: .env
     hostname: nginx
-    init: true
+    #init: true
     restart: on-failure
-    stop_signal: SIGTERM
+    #stop_signal: SIGTERM
     depends_on:
       - wordpress
 ########################################
