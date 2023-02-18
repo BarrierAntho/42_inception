@@ -21,5 +21,5 @@ EXPOSE 443
 #STOPSIGNAL SIGQUIT
 #USER
 #ONBUILD
-CMD ["ping", "localhost"]
-#ENTRYPOINT ["/bin/sh", "-c", "./config.sh"]
+#CMD ["ping", "localhost"]
+ENTRYPOINT ["/bin/sh", "-c", "./config.sh"]

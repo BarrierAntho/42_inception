@@ -71,7 +71,7 @@ function	ssl_certificate()
 	ssl_check_certificate ${3} ${4};
 	if [ "$?" != 0 ]
 	then
-		ssl_create_certificate ${1} ${2} ${3} ${4} ${5} ${6} ${7} ${8} ${9} ${10}${11};
+		ssl_create_certificate ${1} ${2} ${3} ${4} ${5} ${6} ${7} ${8} ${9} ${10} ${11};
 		if [ "$?" != 0 ]; then return 1; fi;
 	fi;
 	return 0;
@@ -82,10 +82,10 @@ function	nginx_create_vhost()
 	echo -e "${YE}${SEP_SP}${NC}";
 	echo -e "${YE}Executing \"${FUNCNAME}\"${NC}";
 	# CREATE VIRTUAL HOST abarrier.42.fr SYMBOLIC LINK
-	#cd ${NG_SITE_ENABLED}/${DOMAIN_NAME}.conf;
-	cd ${2};
+	#cd ${NG_SITE_ENABLED};
+	cd ${3};
 	#ln -s "${NG_SITE_AVAILABLE}/${DOMAIN_NAME}.conf";
-	ln -s ${1};
+	ln -s ${2}/${1}.conf;
 	if [ "$?" != 0 ];
 	then
 		echo -e "${RD}Error: symbolic link creation${NC}";
@@ -101,14 +101,14 @@ function	nginx_vhost()
 	echo -e "${YE}Executing \"${FUNCNAME}\"${NC}";
 	# CHECK IF VIRTUAL HOST abarrier.42.fr ALREADY EXISTS
 	#check_file ${NG_SITE_AVAILABLE}/${DOMAIN_NAME}.conf;
-	check_file ${1};
+	check_file ${2}/${1}.conf;
 	if [ "$?" != 0 ]; then return 1; fi;
 	# CHECK IF VIRTUAL HOST abarrier.42.fr SYMBOLIC LINK ALREADY EXISTS
 	#check_file ${NG_SITE_ENABLED}/${DOMAIN_NAME}.conf;
-	check_file ${2};
+	check_file ${3}/${1}.conf;
 	if [ "$?" != 0 ];
 	then
-		nginx_create_vhost ${1} ${2};
+		nginx_create_vhost ${1} ${2} ${3};
 	fi;
 	return 0;
 }
@@ -134,10 +134,12 @@ function	main()
 {
 	echo -e "${YE}${SEP_SP}${NC}";
 	echo -e "${YE}Executing \"${FUNCNAME}\"${NC}";
-	ssl_certificate ${SSL_DAYS} ${SSL_RSA} ${SSL_KEYOUT_PATH}/${SSL_KEYOUT_NAME} ${SSL_OUT_PATH}/${SSL_OUT_NAME} ${SSL_COUNTRY} ${SSL_STATE} ${SSL_LOCALITY} ${SSL_ORG_NAME} ${SSL_ORGA_UNIT} ${SSL_COMPANY} ${SSL_EMAIL};
+	ssl_certificate ${SSL_DAYS} ${SSL_RSA} ${SSL_KEYOUT_PATH}/${SSL_KEYOUT_NAME} ${SSL_OUT_PATH}/${SSL_OUT_NAME} ${SSL_COUNTRY} ${SSL_STATE} ${SSL_LOCALITY} ${SSL_ORG_NAME} ${SSL_ORG_UNIT} ${SSL_COMPANY} ${SSL_EMAIL};
 	if [ "$?" != 0 ]; then return 1; fi;
-	nginx_vhost ${NG_SITE_AVAILABLE}/${DOMAIN_NAME}.conf ${NG_SITE_ENABLED}/${DOMAIN_NAME}.conf
+	nginx_vhost ${DOMAIN_NAME} ${NG_SITE_AVAILABLE} ${NG_SITE_ENABLED};
 	if [ "$?" != 0 ]; then return 1; fi;
+	nginx_rm_default_vhost ${NG_SITE_ENABLED}/default;
+	nginx_start;
 	return 0;
 }
 
