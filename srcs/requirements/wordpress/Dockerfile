@@ -11,7 +11,7 @@ RUN apt update -y && apt upgrade -y && apt install -y vim \
 	wget \
 	procps \
 	mime-support \
-	php-common php7.3-cli php7.3-common php7.3-json php7.3-opcache php7.3-readline php7.3-mysql \
+	php-common php-mysql php7.3-cli php7.3-common php7.3-json php7.3-opcache php7.3-readline php7.3-mysql \
 	php-fpm \
 	mariadb-client \
 	sendmail \
@@ -21,8 +21,11 @@ RUN 	curl -O https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cl
 	&& mv wp-cli.phar /usr/local/bin/wp
 RUN	mkdir -p /var/www/html/wordpress \
 	&& cd /var/www/html/wordpress \
-	&& wp core download "https://wordpress.org/wordpress-5.2.17.tar.gz" --allow-root
-COPY ["./conf/config.sh", "./"]
+	&& wp core download "https://wordpress.org/wordpress-5.2.17.tar.gz" --allow-root \
+	&& chown -R root:root /var/www/html/wordpress
+RUN	mkdir -p /run/php
+COPY ["./conf/php.conf", "./etc/php/7.3/fpm/pool.d/www.conf"]
+COPY ["./tools/config.sh", "./"]
 #ADD
 #WORKDIR
 EXPOSE 9000
@@ -31,24 +34,3 @@ EXPOSE 9000
 #ONBUILD
 CMD ["ping", "localhost"]
 #ENTRYPOINT ["/bin/sh", "-c", "./config.sh"]
-
-###############################
-# DEPRICATED PHP-FPM INSTALLATION
-# MORE THAN 8 MINUTES TO COMPILE, BUILD AND EXEC PHP-FPM
-#RUN apt update -y && apt upgrade -y && apt install -y vim \
-#	curl \
-#	wget \
-#	gcc \
-#	pkg-config \
-#	make \
-#	libxml2-dev \
-#	sqlite3 \
-#	libsqlite3-dev \
-#	zlib1g \
-#	zlib1g-dev \
-#	php-cgi \
-#	&& rm -rf /var/lib/apt/lists/*
-#
-# DEPRICATED DUE TO USAGE OF wp config create
-# COPY ["./conf/wp-config.php", "/var/www/html/wordpress"]
-

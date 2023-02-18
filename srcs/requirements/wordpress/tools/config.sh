@@ -68,7 +68,7 @@ function	create_wp_db()
 {
 	echo -e "${YE}${SEP_SP}${NC}";
 	echo -e "${YE}Executing \"${FUNCNAME}\"${NC}";
-	wp core install --allow-root --path=${WP_DIR} --url=${DOMAIN_NAME} --title=${WP_TITLE} --admin_user=${WP_MANAGER_NAME} --admin_password=${WP_MANAGER_PASSWORD} --admin_email=${WP_MANAGER_EMAIL}
+	wp core install --allow-root --path=${WP_DIR} --url=${DOMAIN_NAME} --title=${WP_TITLE} --admin_user=${WP_MANAGER_NAME} --admin_password=${WP_MANAGER_PASSWORD} --admin_email=${WP_MANAGER_EMAIL} --skip-email
 	if [ "$?" != 0 ];
 	then
 		echo -e "${RD}Error: wordpress create database${NC}";
@@ -82,10 +82,10 @@ function	create_wp_db_user()
 {
 	echo -e "${YE}${SEP_SP}${NC}";
 	echo -e "${YE}Executing \"${FUNCNAME}\"${NC}";
-	wp user create --allow-root --path=${WP_DIR} ${WP_USR_NAME} ${WP_USR_EMAIL} --user_pass=${WP_USR_PASSWORD} --display_name=${WP_USR_DISP_NAME}
+	wp user create --allow-root --path=${WP_DIR} ${WP_USR_NAME} ${WP_USR_EMAIL} --user_pass=${WP_USR_PASSWORD} --display_name=${WP_USR_DISP_NAME} --role=author
 	if [ "$?" != 0 ];
 	then
-		echo -e "${RD}Error: wordpress create database${NC}";
+		echo -e "${RD}Error: wordpress create user${NC}";
 		echo -e "${YE}${SEP_SP}${NC}";
 		return 1;
 	fi;
@@ -96,7 +96,8 @@ function	start_php_fpm()
 {
 	echo -e "${YE}${SEP_SP}${NC}";
 	echo -e "${YE}Executing \"${FUNCNAME}\"${NC}";
-	service php7.3-fpm start;
+	# EXECUTE PHP-FPM WITH --nodaemonize TO BE DETACHED OF THE DAEMON PID
+	exec /usr/sbin/php-fpm7.3 --nodaemonize;
 	if [ "$?" != 0 ];
 	then
 		echo -e "${RD}Error: start php-fpm${NC}";
