@@ -134,6 +134,10 @@ server {
 [Go To "Survivor Note - Docker"](https://github.com/BarrierAntho/Survivor_Note/tree/main/Docker)
 
 ### Nginx
+- https://www.nginx.com/resources/wiki/start/
+- https://www.nginx.com/resources/wiki/start/topics/tutorials/config_pitfalls/
+- https://wiki.debian.org/Nginx/DirectoryStructure
+
 
 ### OpenSSL
 - https://www.openssl.org/docs/man1.0.2/man1/openssl-req.html
