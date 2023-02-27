@@ -112,6 +112,7 @@ function	main()
 	echo -e "${YE}${SEP_SP}${NC}";
 	echo -e "${YE}Executing \"${FUNCNAME}\"${NC}";
 	# CHECK WORDPRESS SETUP
+	sleep 10
 	check_wp_config;
 	if [ "$?" != 0 ]
 	then
