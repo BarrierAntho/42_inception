@@ -38,7 +38,7 @@ function	stop_mysql()
 {
 	echo -e "${YE}${SEP_SP}${NC}";
 	echo -e "${YE}Executing \"${FUNCNAME}\"${NC}";
-	service mysql stop;
+	mysqladmin -u root -p${MYSQL_ROOT_PASSWORD} shutdown;
 	if [ "$?" != 0 ];
 	then
 		echo -e "${RD}Error: stop mysql${NC}";
