@@ -14,7 +14,6 @@ RUN apt update -y && apt upgrade -y && apt install -y vim \
 	php-common php-mysql php7.3-cli php7.3-common php7.3-json php7.3-opcache php7.3-readline php7.3-mysql \
 	php-fpm \
 	mariadb-client \
-	sendmail \
 	&& rm -rf /var/lib/apt/lists/*
 RUN 	curl -O https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cli.phar \
 	&& chmod +x wp-cli.phar \
