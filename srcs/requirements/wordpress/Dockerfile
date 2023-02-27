@@ -21,7 +21,7 @@ RUN 	curl -O https://raw.githubusercontent.com/wp-cli/builds/gh-pages/phar/wp-cl
 	&& mv wp-cli.phar /usr/local/bin/wp
 RUN	mkdir -p /var/www/wordpress \
 	&& cd /var/www/wordpress \
-	&& wp core download "https://wordpress.org/wordpress-5.2.17.tar.gz" --allow-root \
+	&& wp core download "https://wordpress.org/wordpress-6.1.1.tar.gz" --allow-root \
 	&& chown -R root:root /var/www/wordpress
 RUN	mkdir -p /run/php
 COPY ["./conf/php.conf", "./etc/php/7.3/fpm/pool.d/www.conf"]
