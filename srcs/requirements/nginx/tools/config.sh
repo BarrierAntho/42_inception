@@ -135,8 +135,8 @@ function	main()
 {
 	echo -e "${YE}${SEP_SP}${NC}";
 	echo -e "${YE}Executing \"${FUNCNAME}\"${NC}";
-	ssl_certificate ${SSL_DAYS} ${SSL_RSA} ${SSL_KEYOUT_PATH}/${SSL_KEYOUT_NAME} ${SSL_OUT_PATH}/${SSL_OUT_NAME} ${SSL_COUNTRY} ${SSL_STATE} ${SSL_LOCALITY} ${SSL_ORG_NAME} ${SSL_ORG_UNIT} ${SSL_COMPANY} ${SSL_EMAIL};
-	if [ "$?" != 0 ]; then return 1; fi;
+#	ssl_certificate ${SSL_DAYS} ${SSL_RSA} ${SSL_KEYOUT_PATH}/${SSL_KEYOUT_NAME} ${SSL_OUT_PATH}/${SSL_OUT_NAME} ${SSL_COUNTRY} ${SSL_STATE} ${SSL_LOCALITY} ${SSL_ORG_NAME} ${SSL_ORG_UNIT} ${SSL_COMPANY} ${SSL_EMAIL};
+#	if [ "$?" != 0 ]; then return 1; fi;
 	nginx_vhost ${DOMAIN_NAME} ${NG_SITE_AVAILABLE} ${NG_SITE_ENABLED};
 	if [ "$?" != 0 ]; then return 1; fi;
 	nginx_rm_default_vhost ${NG_SITE_ENABLED}/default;
