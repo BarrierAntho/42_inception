@@ -32,7 +32,7 @@ CY=$(BASE)0;36m
 YE=$(BASE)1;33m
 NC=$(BASE)0m
 
-.PHONY:	all build create stop pause unpause restart up down rm ps stat stat_run stat_pause stat_exited images clean clean_containers clean_images clean_volumes clean_networks clean_data
+.PHONY:	all build create stop pause unpause restart up down rm ps stat stat_run stat_pause stat_exited images clean clean_containers clean_images clean_volumes clean_networks clean_data clean_prune
 
 # -------------------------------------------------
 # SERVICES
@@ -114,6 +114,7 @@ clean:	| stop
 	make -s -i clean_volumes
 	make -s -i clean_networks
 	make -s -i clean_data
+	make -s -i clean_prune
 
 clean_containers:
 	docker rm $$($(DOCKER_PS))
@@ -130,3 +131,6 @@ clean_networks:
 clean_data:
 	sudo rm -rf $(DATA_DIR)
 	exit
+
+clean_prune:
+	docker system prune --all --force
