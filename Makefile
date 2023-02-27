@@ -34,6 +34,8 @@ NC=$(BASE)0m
 
 .PHONY:	all build create stop pause unpause restart up down rm ps stat stat_run stat_pause stat_exited images clean clean_containers clean_images clean_volumes clean_networks clean_data clean_prune
 
+all:	| up
+
 # -------------------------------------------------
 # SERVICES
 # -------------------------------------------------
